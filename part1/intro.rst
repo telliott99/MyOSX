@@ -88,13 +88,15 @@ In the old days (see my old blog posts), it was optional whether you used garbag
 
 What we are supposed to do is to wrap nearly all of ``main`` in ``@autoreleasepool``, like this
 
-#import <Foundation/Foundation.h>
-int main(int argc, char * argv[]) {
-    @autoreleasepool {
-        NSLog(@"Hello %s", argv[1]);
+.. sourcecode:: objective-c
+
+    #import <Foundation/Foundation.h>
+    int main(int argc, char * argv[]) {
+        @autoreleasepool {
+            NSLog(@"Hello %s", argv[1]);
+        }
+        return 0;
     }
-    return 0;
-}
 
 It doesn't matter for this simple program, but it would make a difference if we allocated an ``NSString``, for example.  
 

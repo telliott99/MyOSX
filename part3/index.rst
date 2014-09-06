@@ -7,7 +7,4 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
-   NSString
-   NSColor
-   NSCoder
-   
+   intro3

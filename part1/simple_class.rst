@@ -4,7 +4,7 @@
 Objective-C Class
 #################
 
-Let's look at exactly how one defines a simple Objective-C class.
+Continuing with the command line, let's look at exactly how one defines a simple Objective-C class.
 
 Although it's not absolutely required, the usual thing is to split the class into an ``@interface`` defined in a header file with the ``.h`` extension, and an ``@implementation`` defined in a file with the ``.m`` extension.  Here is:
 

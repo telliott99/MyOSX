@@ -141,6 +141,8 @@ Show in Finder..
 
 The third code snippet is for ``main`` in a new Xcode project:  a Cocoa application named SimpleApp.
 
+.. sourcecode:: objective-c
+
     #import <Cocoa/Cocoa.h>
     #import <SimpleFramework/Stuff.h>
 
@@ -151,8 +153,10 @@ The third code snippet is for ``main`` in a new Xcode project:  a Cocoa applicat
 
 Drag the Simple.framework into this project
 
-dyld: Library not loaded: @rpath/Stuff.framework/Versions/A/Stuff
-  Referenced from: /Users/telliott_admin/Library/Developer/Xcode/DerivedData/SimpleApp-dpctprrfhrnwsvcwwetnwaagsbfx/Build/Products/Debug/SimpleApp.app/Contents/MacOS/SimpleApp
-  Reason: image not found
+.. sourcecode:: bash
+
+    dyld: Library not loaded: @rpath/Stuff.framework/Versions/A/Stuff
+      Referenced from: /Users/telliott_admin/Library/Developer/Xcode/DerivedData/SimpleApp-dpctprrfhrnwsvcwwetnwaagsbfx/Build/Products/Debug/SimpleApp.app/Contents/MacOS/SimpleApp
+      Reason: image not found
 
 
