@@ -10,4 +10,6 @@ Contents:
    NSString
    NSColor
    NSCoder
+   NSProxy
+   webview
    
