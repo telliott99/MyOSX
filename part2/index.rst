@@ -11,5 +11,7 @@ Contents:
    NSColor
    NSCoder
    NSProxy
+   NSTask
+   NSView
    webview
    
