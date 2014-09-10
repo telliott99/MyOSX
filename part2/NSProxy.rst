@@ -4,7 +4,12 @@
 NSProxy
 #######
 
-Here is some code adapted from the blog.  It works, with a warning that I don't know how to fix yet.  There is method for letting the objects know what they respond to, but I have still to read about it.
+Here is some code adapted from the blog.  With help from
+
+
+http://www.informit.com/articles/article.aspx?p=1438422&seqNum=2
+
+I learned about ``inout``, which silenced a warning.
 
 ``talk.m``:
 
@@ -14,11 +19,13 @@ Here is some code adapted from the blog.  It works, with a warning that I don't 
     #import <Foundation/Foundation.h>
 
     @interface VendedObject : NSObject {}
-    -(NSString *) speak;
+    -(inout NSString *) speak;
     @end
 
     @implementation VendedObject
-    -(NSString *) speak { return @"woof"; }
+    -(inout NSString *) speak { 
+        return @"woof"; 
+    }
     @end
 
     int main(){
@@ -26,7 +33,7 @@ Here is some code adapted from the blog.  It works, with a warning that I don't 
             VendedObject *obj;
             obj = [[VendedObject alloc ] init];
             NSLog(@"%@", [obj description]);
-    
+
             NSConnection *conn;
             conn = [[NSConnection alloc] init];
             [conn setRootObject:obj];
@@ -51,10 +58,10 @@ Here is some code adapted from the blog.  It works, with a warning that I don't 
 
     int main(){
         @autoreleasepool{
-            NSDistantObject *proxy_obj;
-            proxy_obj = [NSConnection 
-                rootProxyForConnectionWithRegisteredName:@"my_server" 
-                                                    host:nil];
+            NSConnection *c;
+            c = [NSConnection connectionWithRegisteredName:@"my_server"
+                                                     host:nil];
+            NSDistantObject *proxy_obj = [c rootProxy];
             if (!proxy_obj) {
                 NSLog(@"Did not get an object from the server.");
             }
@@ -65,7 +72,7 @@ Here is some code adapted from the blog.  It works, with a warning that I don't 
         }
     }
 
-And the warning:
+The warning came in compiling ``listen.m``:
 
 .. sourcecode:: bash
 
@@ -81,21 +88,30 @@ And the warning:
     1 warning generated.
     > 
 
+The modification is to ``talk.m``, adding ``inout``:
+
+.. sourcecode:: objective-c
+
+    -(inout NSString *) speak;
+
+Run the two in separate tabs of Terminal:
 
 .. sourcecode:: bash
 
     > ./talk
-    2014-09-09 07:32:33.733 test[11838:507] <VendedObject: 0x7fc9c24062e0>
-    2014-09-09 07:32:33.736 test[11838:507] \
-    (** NSConnection 0x7fc9c27036b0 \
-    receivePort <NSMachPort: 0x7fc9c2703af0> \
-    sendPort <NSMachPort: 0x7fc9c2703af0> \
+    2014-09-10 07:07:37.927 talk[2267:507] \
+    <VendedObject: 0x7fcdd2c08050>
+    2014-09-10 07:07:37.931 talk[2267:507] \
+    (** NSConnection 0x7fcdd2e033c0 
+    receivePort <NSMachPort: 0x7fcdd2e03800> \
+    sendPort <NSMachPort: 0x7fcdd2e03800> \
     refCount 1 remoteUsesKeyedDO: 0 **)
+    
 
 .. sourcecode:: bash
 
     > ./listen
-    2014-09-09 07:32:37.873 listen[11843:507] \
-    Received:  <VendedObject: 0x7fc9c24062e0>
-    2014-09-09 07:32:37.875 listen[11843:507] woof
+    2014-09-10 07:07:42.510 listen[2272:507] \
+    Received:  <VendedObject: 0x7fcdd2c08050>
+    2014-09-10 07:07:42.512 listen[2272:507] woof
     >
