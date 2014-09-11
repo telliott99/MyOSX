@@ -13,5 +13,6 @@ Contents:
    NSProxy
    NSTask
    NSView
+   make_pdf
    webview
    

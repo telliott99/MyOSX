@@ -5,7 +5,9 @@ NSTask
 ######
 
 http://telliott99.blogspot.com/2008/08/nstask.html
+
 http://telliott99.blogspot.com/2010/12/nstask.html
+
 http://telliott99.blogspot.com/2011/01/nstask-again.html
 
 ``talk.m``:
@@ -15,13 +17,19 @@ http://telliott99.blogspot.com/2011/01/nstask-again.html
     #import <Foundation/Foundation.h>
 
     @interface
-    Tasker : NSObject {}
+    Tasker : NSObject { }
+    
+    // this property is just for use in checkTaskStatus:
+    @property (retain) NSTask* task;
+    
     -(void) doSetup;
     -(void) checkTaskStatus:(NSNotification *)notification;
     @end
 
     @implementation
     Tasker : NSObject
+
+    @synthesize task;
 
     -(void) doSetup{
         NSNotificationCenter *nc;
@@ -33,10 +41,21 @@ http://telliott99.blogspot.com/2011/01/nstask-again.html
     }
 
     -(void) checkTaskStatus:(NSNotification *)notification {
+        NSLog(@"checkTaskStatus");
         if ([[notification object] terminationStatus]) {
             NSLog(@"success");
-        };
+        }
+        // defined by each task
+        int ATASK_SUCCESS_VALUE = 0;
+        if (![task isRunning]) {
+            int status = [task terminationStatus];
+            if (status == ATASK_SUCCESS_VALUE)
+                NSLog(@"Task succeeded.");
+            else
+                NSLog(@"Task failed.");
+        }
     }
+
     @end
 
 
@@ -67,8 +86,13 @@ http://telliott99.blogspot.com/2011/01/nstask-again.html
         NSLog(@"%@",[t description]);
         Tasker *tr = [[Tasker alloc] init];
         [tr doSetup];
+        [tr setTask:t];
+
         [t launch];
-        [t waitUntilExit];
+        //[t waitUntilExit];
+
+        [[NSRunLoop currentRunLoop] 
+            runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]]; 
         return 0;
     }
     
@@ -111,8 +135,12 @@ And run it:
 
     > clang task.m -o task -framework Foundation
     > ./task
-    2014-09-10 16:32:33.321 task[596:507] VALUE
-    2014-09-10 16:32:33.323 task[596:507] <NSConcreteTask: 0x7fc1f2c0c0e0>
+    2014-09-10 19:21:36.518 task[520:507] MY_VALUE
+    2014-09-10 19:21:36.520 task[520:507] <NSConcreteTask: 0x7feaa8e01e40>
     Hello world to me!
-    MYKEY VALUE
+    MYKEY MY_VALUE
+    2014-09-10 19:21:36.550 task[520:507] checkTaskStatus
+    2014-09-10 19:21:36.550 task[520:507] Task succeeded.
     >
+
+We see that everything works.  Even ``checkTaskStatus:`` is getting called.
