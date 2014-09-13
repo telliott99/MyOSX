@@ -8,7 +8,12 @@ Contents:
    :maxdepth: 1
    
    NSString
+   NSArray
    NSColor
+   NSTimer
+   NSDate
+   linking
+   files
    NSCoder
    NSProxy
    NSTask
