@@ -14,6 +14,7 @@ Contents:
    NSDate
    linking
    files
+   NSURLConnection
    NSCoder
    NSProxy
    NSTask

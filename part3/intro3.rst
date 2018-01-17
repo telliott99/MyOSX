@@ -42,13 +42,21 @@ Set up the code in ``AppDelegate.m`` by adding:
         NSLog(@"push");
     }
 
-and put the appropriate declaration in ``AppDelegate.h``:
+It is not necessary to put a declaration in ``AppDelegate.h``.  Some people may do it, however.  For example, in the very first project in Hillegass, the header looks like this:
 
 .. sourcecode:: objective-c
 
-    -(IBAction) push: (id)sender;
+    #import <Foundation/Foundation.h>
 
-Finally, go back to ``MainMenu.xib`` and control-drag *from the button to the AppDelegate icon* (it's the fourth icon down, an Object cube with the tool tip:  AppDelegate).  The button needs to send messages *to* the AppDelegate.
+    @interface RandomController : NSObject {
+        IBOutlet NSTextField *textField;
+    }
+    -(IBAction) seed:(id) sender;
+    -(IBAction) generate:(id) sender;
+    @end
+
+
+To complete our demo project, go back to ``MainMenu.xib`` and control-drag *from the button to the AppDelegate icon* (it's the fourth icon down, an Object cube with the tool tip:  AppDelegate).  The button needs to send messages *to* the AppDelegate.
 
 You should see
 
@@ -79,7 +87,7 @@ The code for an IBOutlet is hard for me to remember, even though it's simple.  I
     
 Make sure that if there are instance variables declared (between brackets ``{ }``), that the ``@property`` declaration is after the closing bracket.
 
-Control-drag *from the AppDelegate icon to the text field* (the fourth icon down, an Object cube with the tool tip:  AppDelegate).  The AppDelegate needs to send messages *to* the textfield.
+Control-drag *from the AppDelegate icon to the text field* (the AppDelegate is the fourth icon down, an Object cube with the tool tip of that name).  The AppDelegate needs to send messages *to* the textfield.
 
 .. image:: /figures/outlet.png
     :scale: 100 %
@@ -94,6 +102,7 @@ To make things a little more interesting, we will add two variables, so the head
         NSString *s;
         int n;
     }
+    
     @property (weak) IBOutlet NSTextField *textField;
     -(IBAction) push: (id)sender;
     @end
@@ -121,6 +130,33 @@ To make things a little more interesting, we will add two variables, so the head
 Each time the button is pushed, we query the text field for its value.  The first time it will be "Label".  In that case we set our ``int`` variable to 0.  Otherwise, it should be convertible to an integer, which we get with ``intValue``.  Then, in all cases, we increment it.  So ``n`` will take on the values ``1, 2, 3..``, sequentially.
 
 We convert back to a string (using ``stringWithFormat``), and set the text field's value to that.  For an extra flourish, we set the text color to black for even numbers and red for odd ones.
+
+When looking again at Hillegass, I notice that their IBOutlet is between the brackets in the header:
+
+.. sourcecode:: objective-c
+
+    #import <Foundation/Foundation.h>
+
+    @interface RandomController : NSObject {
+        IBOutlet NSTextField *textField;
+    }
+    -(IBAction) seed:(id) sender;
+    -(IBAction) generate:(id) sender;
+    @end
+
+The difference is that we did the ``@property`` thing
+
+.. sourcecode:: objective-c
+
+    @property (weak) IBOutlet NSTextField *textField;
+
+We can change it to this (and it works fine).  We actually didn't didn't do ``@synthesize`` inside the implementation, so I guess the Hillegass version is better.
+
+Also, if you look at the AppDelegate you'll notice that it has
+
+@property (weak) IBOutlet NSWindow *window;
+
+in ``AppDelegate.m`` but not in the header.
 
 -----------
 Custom View

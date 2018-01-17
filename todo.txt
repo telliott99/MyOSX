@@ -1,0 +1,3 @@
+see predicate (ObjC book at 49%)
+blocks
+memory management (ObjC book near 75%??)

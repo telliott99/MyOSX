@@ -135,6 +135,7 @@ Here is a selection of NSString methods:
     - ``componentsSeparatedByCharactersInSet:``
     - ``substringFromIndex:``
     - ``substringWithRange:``
+    - ``UTF8String``
 
 For the most part, usage is pretty straightforward.
 
@@ -223,3 +224,28 @@ A bit more:
     2014-09-06 09:01:36.866 prog[10749:507] yes
     2014-09-06 09:01:36.866 prog[10749:507] cd
     2014-09-06 09:01:36.867 prog[10749:507] 6 2
+
+It's recommended that you use C strings as little as possible, but you can do it
+
+.. sourcecode:: objective-c
+
+    #import <Foundation/Foundation.h>
+
+    int main(int argc, char * argv[]) {
+        @autoreleasepool {
+            char *cstr = "abc\0";
+            NSStringEncoding ascii = NSASCIIStringEncoding;
+            NSString* s = [NSString stringWithCString:cstr
+                                             encoding:ascii];
+            const char *cstr2 = [s UTF8String];
+            printf("%s\n", cstr2);
+        }
+        return 0;
+    }
+    
+.. sourcecode:: bash
+
+    > clang main.m -o prog -framework Foundation
+    > ./prog
+    abc
+    >
